@@ -30,11 +30,20 @@ namespace Capstone.Classes
 
                 if(mainMenuOption == "1")
                 {
+                    Console.WriteLine($"Product Code Description Qty Price");
+                    CateringItem[] items = catering.GetItems();
+                    for (int i = 0; i < items.Length; i++)
+                    {
+                        Console.WriteLine($"{items[i].ProductCode} {items[i].Description} {items[i].Qty} {items[i].Price}");
+                    }
 
                 }
                 else if(mainMenuOption == "2")
                 {
-
+                    Console.WriteLine("(1) Add money");
+                    Console.WriteLine("(2) Select products");
+                    Console.WriteLine("(3) Complete transaction");
+                    Console.WriteLine("Current account balance");
                 }
                 else if (mainMenuOption == "3")
                 {

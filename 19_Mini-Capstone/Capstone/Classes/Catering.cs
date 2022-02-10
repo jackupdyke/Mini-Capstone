@@ -16,7 +16,15 @@ namespace Capstone.Classes
             items = fileAccess.ReadFromFile();
         }
 
-        
+        public CateringItem[] GetItems()
+        {
+            CateringItem[] arrayItems = new CateringItem[items.Count];
+            for (int i = 0; i < items.Count; i++) 
+            {
+                arrayItems[i] = items[i];
+            }
+            return arrayItems;
+        }
         
 
    

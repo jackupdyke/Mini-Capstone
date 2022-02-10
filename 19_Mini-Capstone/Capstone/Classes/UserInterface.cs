@@ -21,8 +21,31 @@ namespace Capstone.Classes
             bool done = false;
             while (!done)
             {
-                Console.WriteLine("This is the UserInterface");
-                Console.ReadLine();
+                Console.WriteLine("(1) Display Catering Items");
+                
+                Console.WriteLine("(2) Order");
+               
+                Console.WriteLine("(3) Quit");
+                string mainMenuOption = Console.ReadLine();
+
+                if(mainMenuOption == "1")
+                {
+
+                }
+                else if(mainMenuOption == "2")
+                {
+
+                }
+                else if (mainMenuOption == "3")
+                {
+
+                }
+                else
+                {
+                    Console.WriteLine("Invalid user input.");
+                }
+
+
             }
 
         }

@@ -14,6 +14,7 @@ namespace Capstone.Classes
         {
             FileAccess fileAccess = new FileAccess();
             items = fileAccess.ReadFromFile();
+            
         }
 
         public CateringItem[] GetItems()
@@ -25,8 +26,13 @@ namespace Capstone.Classes
             }
             return arrayItems;
         }
-        
 
-   
+        public decimal Balance { get; private set; }
+        public decimal AddBalance(decimal addAmount)
+        {
+            Balance += addAmount;
+            return Balance;
+        }
+
     }
 }

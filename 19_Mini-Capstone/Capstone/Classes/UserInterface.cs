@@ -32,6 +32,7 @@ namespace Capstone.Classes
                 {
                     Console.WriteLine($"Product Code Description Qty Price");
                     CateringItem[] items = catering.GetItems();
+                    
                     for (int i = 0; i < items.Length; i++)
                     {
                         Console.WriteLine($"{items[i].ProductCode} {items[i].Description} {items[i].Qty} {items[i].Price}");
@@ -43,7 +44,26 @@ namespace Capstone.Classes
                     Console.WriteLine("(1) Add money");
                     Console.WriteLine("(2) Select products");
                     Console.WriteLine("(3) Complete transaction");
-                    Console.WriteLine("Current account balance");
+                    Console.WriteLine($"Current account balance: {catering.Balance}");
+                    string orderOptions = Console.ReadLine();
+                    if(orderOptions == "1")
+                    {
+                        Console.WriteLine("Please enter whole dollar amount up to $500. (e.g. $1, $5, $10,etc.)");
+                        decimal depositAmount = decimal.Parse(Console.ReadLine());
+                        catering.AddBalance(depositAmount);
+                    }
+                    else if(orderOptions == "2")
+                    {
+                        CateringItem[] items = catering.GetItems();
+
+                        for (int i = 0; i < items.Length; i++)
+                        {
+                            Console.WriteLine($"{items[i].ProductCode} {items[i].Description} {items[i].Qty} {items[i].Price}");
+                        }
+
+                        Console.WriteLine("Please select a product:");
+                    }
+                    
                 }
                 else if (mainMenuOption == "3")
                 {

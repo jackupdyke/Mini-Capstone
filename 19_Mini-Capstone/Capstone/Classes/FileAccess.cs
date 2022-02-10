@@ -25,7 +25,7 @@ namespace Capstone.Classes
                     {
                         string line = sr.ReadLine();
                         string[] CateringList = line.Split("|");
-                        CateringItem cateringItem = new CateringItem(CateringList[1], CateringList[2], 25, decimal.Parse(CateringList[3]));
+                        CateringItem cateringItem = new CateringItem(CateringList[1], CateringList[2], "25", decimal.Parse(CateringList[3]));
                         CateringMenu.Add(cateringItem);
 
 

@@ -7,7 +7,7 @@ namespace Capstone.Classes
     public class CateringItem
     {
         // This class should contain the definition for one catering item
-        public CateringItem(string productCode, string description, int qty, decimal price)
+        public CateringItem(string productCode, string description, string qty, decimal price)
         {
             ProductCode = productCode;
             Description = description;
@@ -18,7 +18,7 @@ namespace Capstone.Classes
      
         public string ProductCode { get; set; }
         public string Description { get; set; }
-        public int Qty { get; set; }
+        public string Qty { get; set; }
         public decimal Price { get; set; }
     }
 }

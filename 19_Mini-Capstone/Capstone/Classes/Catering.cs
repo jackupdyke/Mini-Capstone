@@ -16,9 +16,27 @@ namespace Capstone.Classes
         {
             FileAccess fileAccess = new FileAccess();
             items = fileAccess.ReadFromFile();
+            //items = SortProductCode(items);
             
         }
 
+        //public List<CateringItem> SortProductCode(List<CateringItem> items)
+        //{
+        //    List<string> productCode = new List<string>();
+        //    List<CateringItem> sortedMenu = new List<CateringItem>();
+        //    foreach(CateringItem item in items)
+        //    {
+        //        productCode.Add(item.ProductCode);
+        //    }
+        //    productCode.Sort();
+        //    //for(int i = 0; i < productCode.Count; i++)
+        //    //{
+        //    //    int index = items[i].ProductCode.IndexOf(productCode[i]);
+        //    //    sortedMenu.Add(productCode[i], items.);
+
+        //    //}
+        //    return sortedMenu;
+        //}
         public CateringItem[] GetItems()
         {
             CateringItem[] arrayItems = new CateringItem[items.Count];
@@ -99,5 +117,28 @@ namespace Capstone.Classes
             
         }
 
+        public decimal GetTotalCost()
+        {
+            decimal total = 0.00M;
+            foreach(CateringItem item in items)
+            {
+                foreach(KeyValuePair<string, int> kvp in shoppingCart)
+                {
+                    if(kvp.Key == item.ProductCode)
+                    {
+                         total += kvp.Value * item.Price;
+                    }
+                }
+            }
+            return total;
+        }
+
+        public decimal GetChangeReturned()
+        {
+            decimal changeDue = 0.00M;
+
+            changeDue = Balance - GetTotalCost();
+            return changeDue;
+        }
     }
 }

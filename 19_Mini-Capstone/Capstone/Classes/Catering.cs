@@ -62,10 +62,12 @@ namespace Capstone.Classes
                 if (addAmount == 1 || addAmount == 5 || addAmount == 10 || addAmount == 20 ||
                     addAmount == 50 || addAmount == 100)
                 {
+                    
+                    Balance += addAmount;
                     string addMoneyInfo = $"{DateTime.Now} ADD MONEY: {addAmount} {Balance}";
                     fileAccess.WriteToFile(addMoneyInfo);
-                    Balance += addAmount;
                     return Balance;
+
                 }
                 else
                 {
@@ -84,12 +86,16 @@ namespace Capstone.Classes
             foreach(CateringItem item in items)
             {
 
-                //checks if current item has needed product coe
+                //checks if current item has needed product code
                 if(item.ProductCode == productCode)
                 {
-
+                    if(item.Qty == "SOLD OUT")
+                    {
+                        return "Item sold out";
+                    }
+                    
                     //checks if quantity wanted greater or equal to inventory
-                    if (int.Parse(item.Qty) >= qty)
+                   else if ((int.Parse(item.Qty) >= qty) && (Balance >= (qty * item.Price)))
                     {
 
                         //gets integer of current quatity;
@@ -103,8 +109,11 @@ namespace Capstone.Classes
                         {
                             //if it does, it increases quantity
                             shoppingCart[productCode] = qty + shoppingCart[productCode];
-                            Balance -= item.Price * shoppingCart[productCode];
+                            Balance -= item.Price * qty;
 
+                            string shoppingCartTransaction = "";
+                            shoppingCartTransaction = $"{DateTime.Now} {shoppingCart[productCode]} {item.Description} {productCode} {item.Price * shoppingCart[productCode]} {Balance}";
+                            fileAccess.WriteToFile(shoppingCartTransaction);
                             if (int.Parse(item.Qty) == 0)
                             {
                                 item.Qty = "SOLD OUT";
@@ -118,6 +127,8 @@ namespace Capstone.Classes
                             shoppingCart.Add(productCode, qty);
                             Balance -= item.Price * qty;
 
+                            string shoppingCartTransaction = $"{DateTime.Now} {shoppingCart[productCode]} {item.Description} {productCode} {item.Price * shoppingCart[productCode]} {Balance}";
+                            fileAccess.WriteToFile(shoppingCartTransaction);
                             if (int.Parse(item.Qty) == 0)
                             {
                                 item.Qty = "SOLD OUT";
@@ -127,9 +138,10 @@ namespace Capstone.Classes
                         }
  
                     }
-                    else if (int.Parse(item.Qty) == 0)
+                    
+                    else if(Balance < item.Price * qty)
                     {
-                        return "Item Sold Out";
+                        return "Insufficient Funds";
                     }
                     else
                     {
@@ -165,7 +177,8 @@ namespace Capstone.Classes
         public string GetChangeReturned()
         {
             decimal changeDue = 0.00M;
-            changeDue = Balance - GetTotalCost();
+            changeDue = Balance;
+            decimal changeDueConstant = changeDue;
 
             int fifties = 0;
             int twenties = 0;
@@ -226,6 +239,10 @@ namespace Capstone.Classes
             }
             string returnString = changeString.Substring(0, changeString.Length - 2);
             Balance = 0.00M;
+
+            string getChangeTransaction = "";
+            getChangeTransaction = $"{DateTime.Now} GIVE CHANGE {changeDueConstant} {Balance}";
+            fileAccess.WriteToFile(getChangeTransaction);
             return returnString;
         }
 

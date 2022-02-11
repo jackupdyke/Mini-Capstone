@@ -9,7 +9,7 @@ namespace Capstone.Classes
     {
         // all files for this application should in this directory
         // you will likley need to create it on your computer
-        public string filePath = @"C:\Catering\cateringsystem.csv";
+        private string filePath = @"C:\Catering\cateringsystem.csv";
         //public string sourceFile = @"";
         //public string cateringMenu = Path.Combine(filePath, sourceFile);
         private string destinationFile = @"C:\Catering\log.txt";

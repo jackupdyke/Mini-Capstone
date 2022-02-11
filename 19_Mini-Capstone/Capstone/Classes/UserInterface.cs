@@ -146,15 +146,13 @@ namespace Capstone.Classes
                     }
                     Console.WriteLine($"{cart[item.ProductCode].ToString().PadRight(5)} {itemType.PadRight(10)} {item.Description.PadRight(20)} ${item.Price.ToString().PadRight(5)} ${(item.Price * cart[item.ProductCode]).ToString().PadRight(5)} {message.PadRight(5)}");
 
-                    string transactionInfo = $"{DateTime.Now} {cart[item.ProductCode]} {item.Description} {item.ProductCode} {item.Price * cart[item.ProductCode]} {catering.Balance - (item.Price * cart[item.ProductCode])}";
-                    FileAccess fileaccess = new FileAccess();
-                    fileaccess.WriteToFile(transactionInfo);
+                    
                     
                 }
                 
             }
             Console.WriteLine();
-            Console.WriteLine($"Total: {catering.GetTotalCost()}");
+            Console.WriteLine($"Total: ${catering.GetTotalCost()}");
             Console.WriteLine();
             Console.WriteLine($"You recieved {catering.GetChangeReturned()}");
             

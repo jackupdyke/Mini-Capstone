@@ -36,7 +36,7 @@ namespace Capstone.Classes
                 }
                 else if (mainMenuOption == "2")
                 {
-                    //while loop?? until transaction completed
+                    //Loop to continue running the program until the user selects 3(Complete Transaction)
                     bool completedTransaction = false;
                     while (!completedTransaction)
                     {
@@ -54,7 +54,7 @@ namespace Capstone.Classes
 
                         else if (orderOptions == "3")
                         {
-                            //decimal total = catering.GetTotalCost();
+                            
                             PrintReciept();
                             
                             completedTransaction = true;

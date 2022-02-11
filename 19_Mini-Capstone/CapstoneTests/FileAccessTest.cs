@@ -18,5 +18,14 @@ namespace CapstoneTests
 
         }
 
+        [TestMethod]
+        public void ReadFromFileTest()
+        {
+            FileAccess fileAccess = new FileAccess();
+
+            Assert.AreEqual(18, fileAccess.ReadFromFile().Count);
+        }
+
     }
+    
 }

@@ -16,12 +16,7 @@ namespace CapstoneTests
         [TestMethod]
         public void Check_that_catering_object_is_created()
         {
-            // Arrange 
             
-
-            // Act
-
-
             //Assert
             Assert.IsNotNull(catering);
         }
@@ -45,7 +40,7 @@ namespace CapstoneTests
             testList = catering.SortProductCode(testList);
 
            
-            //Tried this: CollectionAssert.AreEqual(expectedList, testList);
+            
             //Assert
             Assert.AreEqual(expectedList[0].ProductCode, testList[0].ProductCode);
             Assert.AreEqual(expectedList[1].Description, testList[1].Description);
@@ -84,7 +79,7 @@ namespace CapstoneTests
 
             };
 
-            //CollectionAssert.AreEqual(expectedArray, testArray);
+            
 
             Assert.AreEqual(expectedArray[0].Description, testArray[0].Description);
             Assert.AreEqual(expectedArray[3].Price, testArray[3].Price);
@@ -192,8 +187,6 @@ namespace CapstoneTests
             catering.AddToShoppingCart("B1", 2);
             catering.AddToShoppingCart("B3", 1);
             catering.AddToShoppingCart("E1", 4);
-
-            decimal expectedTotalCost = 40.95M;
 
             string testChangeReturned = catering.GetChangeReturned();
 

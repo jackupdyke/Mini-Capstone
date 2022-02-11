@@ -127,10 +127,13 @@ namespace Capstone.Classes
                         //updates item quantity
                         item.Qty = (tempQty - qty).ToString();
 
-                        //check if cart already has this item
+                        //check if cart already has this item, if item is already in cart we are updating its quantity in our cart
                         if (shoppingCart.ContainsKey(productCode))
                         {shoppingCart[productCode] = qty + shoppingCart[productCode];
                             Balance -= item.Price * qty;
+                            //Logging transaction 
+                            string shoppingCartTransaction = $"{DateTime.Now} {qty} {item.Description} {productCode} {item.Price * qty} {Balance}";
+                            fileAccess.WriteToFile(shoppingCartTransaction);
                             if (int.Parse(item.Qty) == 0)
                             {
                                 item.Qty = "SOLD OUT";
@@ -138,11 +141,11 @@ namespace Capstone.Classes
                             return "added";
                         }
                         else
-                        {
+                        { //add selected product to our shopping cart dictionary and updating the Balance on the account
                             shoppingCart.Add(productCode, qty);
                             Balance -= item.Price * qty;
-
-                            string shoppingCartTransaction = $"{DateTime.Now} {shoppingCart[productCode]} {item.Description} {productCode} {item.Price * shoppingCart[productCode]} {Balance}";
+                            //logging shopping cart transactions
+                            string shoppingCartTransaction = $"{DateTime.Now} {qty} {item.Description} {productCode} {item.Price * qty} {Balance}";
                             fileAccess.WriteToFile(shoppingCartTransaction);
                             if (int.Parse(item.Qty) == 0)
                             {
@@ -174,6 +177,7 @@ namespace Capstone.Classes
        {
             return shoppingCart;
        }
+        //Getting total cost of all items in shopping cart
         public decimal GetTotalCost()
         {
             decimal total = 0.00M;
@@ -189,7 +193,7 @@ namespace Capstone.Classes
             }
             return total;
         }
-
+        //Calculate the change due in the least amount of bills
         public string GetChangeReturned()
         {
             decimal changeDue = 0.00M;
@@ -205,7 +209,7 @@ namespace Capstone.Classes
             int dimes = 0;
             int nickels = 0;
             string changeString = "";
-
+            //Used integer division to ensure hgighest bills were being added first, and then trickled down based on the mod(remainder) in the changeDue
             if (changeDue - 50 > 0)
             {
                 fifties = (int)(changeDue / 50);
@@ -255,7 +259,7 @@ namespace Capstone.Classes
             }
             string returnString = changeString.Substring(0, changeString.Length - 2);
             Balance = 0.00M;
-
+            //Logged the change returned to the customer
             string getChangeTransaction = "";
             getChangeTransaction = $"{DateTime.Now} GIVE CHANGE {changeDueConstant} {Balance}";
             fileAccess.WriteToFile(getChangeTransaction);

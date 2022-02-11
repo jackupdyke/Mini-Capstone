@@ -80,37 +80,49 @@ namespace Capstone.Classes
 
         public string AddToShoppingCart(string productCode, int qty)
         {
-           
+           //runs through each item in menu
             foreach(CateringItem item in items)
             {
+
+                //checks if current item has needed product coe
                 if(item.ProductCode == productCode)
                 {
+
+                    //checks if quantity wanted greater or equal to inventory
                     if (int.Parse(item.Qty) >= qty)
                     {
+
+                        //gets integer of current quatity;
                         int tempQty = int.Parse(item.Qty);
+
+                        //updates item quantity
                         item.Qty = (tempQty - qty).ToString();
 
-
+                        //check if cart already has this item
                         if (shoppingCart.ContainsKey(productCode))
                         {
+                            //if it does, it increases quantity
                             shoppingCart[productCode] = qty + shoppingCart[productCode];
+                            Balance -= item.Price * shoppingCart[productCode];
+
                             if (int.Parse(item.Qty) == 0)
                             {
                                 item.Qty = "SOLD OUT";
                             }
 
-                            Balance -= item.Price * int.Parse(item.Qty);
+                            
                             return "added";
                         }
                         else
                         {
                             shoppingCart.Add(productCode, qty);
-                            
+                            Balance -= item.Price * qty;
+
                             if (int.Parse(item.Qty) == 0)
                             {
                                 item.Qty = "SOLD OUT";
                             }
-                            Balance -= item.Price * int.Parse(item.Qty);
+                            
                             return "added";
                         }
  

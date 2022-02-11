@@ -12,7 +12,7 @@ namespace Capstone.Classes
         public string filePath = @"C:\Catering\cateringsystem.csv";
         //public string sourceFile = @"";
         //public string cateringMenu = Path.Combine(filePath, sourceFile);
-        //private string destinationFile = @"\log.txt";
+        private string destinationFile = @"C:\Catering\log.txt";
 
         public List<CateringItem> ReadFromFile()
         {
@@ -36,9 +36,28 @@ namespace Capstone.Classes
             }
             catch (IOException ex)
             {
-                //return 
+                Console.WriteLine("Error: " + ex.Message);
             }
             return CateringMenu;
+        }
+        public void WriteToFile(string transaction)
+        {
+            try
+            {
+
+                using (StreamWriter sw = new StreamWriter(destinationFile, true))
+                {
+
+
+                    sw.WriteLine(transaction);
+
+                }
+            }
+
+            catch (IOException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
         }
        
         

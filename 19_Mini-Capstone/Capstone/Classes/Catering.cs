@@ -10,33 +10,39 @@ namespace Capstone.Classes
 
         private List<CateringItem> items = new List<CateringItem>();
         private Dictionary<string, int> shoppingCart = new Dictionary<string, int>();
-
+        private FileAccess fileAccess = new FileAccess();
 
         public Catering()
         {
-            FileAccess fileAccess = new FileAccess();
+            
             items = fileAccess.ReadFromFile();
-            //items = SortProductCode(items);
+            items = SortProductCode(items);
             
         }
 
-        //public List<CateringItem> SortProductCode(List<CateringItem> items)
-        //{
-        //    List<string> productCode = new List<string>();
-        //    List<CateringItem> sortedMenu = new List<CateringItem>();
-        //    foreach(CateringItem item in items)
-        //    {
-        //        productCode.Add(item.ProductCode);
-        //    }
-        //    productCode.Sort();
-        //    //for(int i = 0; i < productCode.Count; i++)
-        //    //{
-        //    //    int index = items[i].ProductCode.IndexOf(productCode[i]);
-        //    //    sortedMenu.Add(productCode[i], items.);
+        public List<CateringItem> SortProductCode(List<CateringItem> items)
+        {
+            List<string> productCode = new List<string>();
+            List<CateringItem> sortedMenu = new List<CateringItem>();
+            foreach (CateringItem item in items)
+            {
+                productCode.Add(item.ProductCode);
+            }
+            productCode.Sort();
+            for (int i = 0; i < productCode.Count; i++)
+            {
+                foreach (CateringItem item in items)
+                {
+                    if (productCode[i] == item.ProductCode)
+                    {
+                        sortedMenu.Add(item);
+                    }
 
-        //    //}
-        //    return sortedMenu;
-        //}
+                }
+
+            }
+            return sortedMenu;
+        }
         public CateringItem[] GetItems()
         {
             CateringItem[] arrayItems = new CateringItem[items.Count];
@@ -50,11 +56,14 @@ namespace Capstone.Classes
         public decimal Balance { get; private set; }
         public decimal AddBalance(decimal addAmount)
         {
+            
             if (addAmount <= 100 && Balance + addAmount <= 1500)
             {
                 if (addAmount == 1 || addAmount == 5 || addAmount == 10 || addAmount == 20 ||
                     addAmount == 50 || addAmount == 100)
                 {
+                    string addMoneyInfo = $"{DateTime.Now} ADD MONEY: {addAmount} {Balance}";
+                    fileAccess.WriteToFile(addMoneyInfo);
                     Balance += addAmount;
                     return Balance;
                 }
@@ -89,15 +98,19 @@ namespace Capstone.Classes
                             {
                                 item.Qty = "SOLD OUT";
                             }
+
+                            Balance -= item.Price * int.Parse(item.Qty);
                             return "added";
                         }
                         else
                         {
                             shoppingCart.Add(productCode, qty);
+                            
                             if (int.Parse(item.Qty) == 0)
                             {
                                 item.Qty = "SOLD OUT";
                             }
+                            Balance -= item.Price * int.Parse(item.Qty);
                             return "added";
                         }
  
@@ -117,6 +130,10 @@ namespace Capstone.Classes
             
         }
 
+       public Dictionary<string, int> GetCart()
+       {
+            return shoppingCart;
+       }
         public decimal GetTotalCost()
         {
             decimal total = 0.00M;
@@ -196,6 +213,7 @@ namespace Capstone.Classes
                 changeString += "(" + nickels + ") nickels, ";
             }
             string returnString = changeString.Substring(0, changeString.Length - 2);
+            Balance = 0.00M;
             return returnString;
         }
 

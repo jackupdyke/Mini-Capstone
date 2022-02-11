@@ -15,7 +15,7 @@ namespace Capstone.Classes
         // in any other class.
 
         private Catering catering = new Catering();
-
+       
         public void RunInterface()
         {
             bool done = false;
@@ -30,6 +30,7 @@ namespace Capstone.Classes
 
                 if (mainMenuOption == "1")
                 {
+                    
                     DisplayMenu();
 
                 }
@@ -54,8 +55,8 @@ namespace Capstone.Classes
                         else if (orderOptions == "3")
                         {
                             //decimal total = catering.GetTotalCost();
-                            Console.WriteLine($"Total: {catering.GetTotalCost()}");
-                            Console.WriteLine($"You recieved {catering.GetChangeReturned()}");
+                            PrintReciept();
+                            
                             completedTransaction = true;
                         }
                         else
@@ -76,12 +77,12 @@ namespace Capstone.Classes
         public void DisplayMenu()
         {
 
-            Console.WriteLine($"Product Code Description Qty Price");
+            Console.WriteLine($"Product Code  Description          Qty  Price");
             CateringItem[] items = catering.GetItems();
 
             for (int i = 0; i < items.Length; i++)
             {
-                Console.WriteLine($"{items[i].ProductCode} {items[i].Description} {items[i].Qty} {items[i].Price}");
+                Console.WriteLine($" {items[i].ProductCode.PadRight(12)} {items[i].Description.PadRight(20)} {items[i].Qty}   ${items[i].Price}");
             }
         }
 
@@ -95,25 +96,68 @@ namespace Capstone.Classes
 
         public void AddMoney()
         {
-            Console.WriteLine("Please enter whole dollar amount up to $500. (e.g. $1, $5, $10,etc.)");
+            Console.WriteLine("Please enter whole dollar amount up to $100. (e.g. $1, $5, $10,etc.)");
             decimal depositAmount = decimal.Parse(Console.ReadLine());
             catering.AddBalance(depositAmount);
+            
         }
 
         public void SelectProducts()
         {
-            CateringItem[] items = catering.GetItems();
-
-            for (int i = 0; i < items.Length; i++)
-            {
-                Console.WriteLine($"{items[i].ProductCode} {items[i].Description} {items[i].Qty} {items[i].Price}");
-            }
+            DisplayMenu();
 
             Console.WriteLine("Please select a product:");
             string productChoice = Console.ReadLine();
             Console.WriteLine("Please select quantity");
             int productQty = int.Parse(Console.ReadLine());
             Console.WriteLine(catering.AddToShoppingCart(productChoice, productQty));
+
+        }
+
+        public void PrintReciept()
+        {
+            Dictionary<string, int> cart = catering.GetCart();
+            CateringItem[] items = catering.GetItems();
+            string itemType = "";
+            string message = "";
+            foreach(CateringItem item in items)
+            {
+                if (cart.ContainsKey(item.ProductCode))
+                {
+                    if (item.ProductCode.Substring(0,1) == "A")
+                    {
+                        itemType = "Appetizer";
+                        message = "You might need extra plates.";
+                    }
+                    else if (item.ProductCode.Substring(0, 1) == "B")
+                    {
+                        itemType = "Beverage";
+                        message = "Don't forget ice.";
+                    }
+                    else if (item.ProductCode.Substring(0, 1) == "D")
+                    {
+                        itemType = "Dessert";
+                        message = "Coffee goes with dessert";
+                    }
+                    else if (item.ProductCode.Substring(0, 1) == "E")
+                    {
+                        itemType = "Entree";
+                        message = "Did you remember dessert?";
+                    }
+                    Console.WriteLine($"{cart[item.ProductCode].ToString().PadRight(5)} {itemType.PadRight(10)} {item.Description.PadRight(20)} ${item.Price.ToString().PadRight(5)} ${(item.Price * cart[item.ProductCode]).ToString().PadRight(5)} {message.PadRight(5)}");
+
+                    string transactionInfo = $"{DateTime.Now} {cart[item.ProductCode]} {item.Description} {item.ProductCode} {item.Price * cart[item.ProductCode]} {catering.Balance - (item.Price * cart[item.ProductCode])}";
+                    FileAccess fileaccess = new FileAccess();
+                    fileaccess.WriteToFile(transactionInfo);
+                    
+                }
+                
+            }
+            Console.WriteLine();
+            Console.WriteLine($"Total: {catering.GetTotalCost()}");
+            Console.WriteLine();
+            Console.WriteLine($"You recieved {catering.GetChangeReturned()}");
+            
         }
 }
 }

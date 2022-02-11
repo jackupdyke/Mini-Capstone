@@ -53,8 +53,9 @@ namespace Capstone.Classes
 
                         else if (orderOptions == "3")
                         {
-                            catering.GetTotalCost();
-                            Console.WriteLine(catering.GetChangeReturned());
+                            //decimal total = catering.GetTotalCost();
+                            Console.WriteLine($"Total: {catering.GetTotalCost()}");
+                            Console.WriteLine($"You recieved {catering.GetChangeReturned()}");
                             completedTransaction = true;
                         }
                         else
@@ -64,6 +65,10 @@ namespace Capstone.Classes
                     }
 
 
+                }
+                else if (mainMenuOption == "3")
+                {
+                    done = true;
                 }
 
             }

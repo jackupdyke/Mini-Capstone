@@ -133,12 +133,72 @@ namespace Capstone.Classes
             return total;
         }
 
-        public decimal GetChangeReturned()
+        public string GetChangeReturned()
         {
             decimal changeDue = 0.00M;
-
             changeDue = Balance - GetTotalCost();
-            return changeDue;
+
+            int fifties = 0;
+            int twenties = 0;
+            int tens = 0;
+            int fives = 0;
+            int ones = 0;
+            int quarters = 0;
+            int dimes = 0;
+            int nickels = 0;
+            string changeString = "";
+
+            if (changeDue - 50 > 0)
+            {
+                fifties = (int)(changeDue / 50);
+                changeDue = changeDue % 50;
+                changeString += "(" + fifties + ") fifties, ";
+            }
+            if (changeDue - 20 > 0)
+            {
+                twenties = (int)(changeDue / 20);
+                changeDue = changeDue % 20;
+                changeString += "(" + twenties + ") twenties, ";
+            }
+            if (changeDue - 10 > 0)
+            {
+                tens = (int)(changeDue / 10);
+                changeDue = changeDue % 10;
+                changeString += "(" + tens + ") tens, ";
+            }
+            if (changeDue - 5 > 0)
+            {
+                fives = (int)(changeDue / 5);
+                changeDue = changeDue % 5;
+                changeString += "(" + fives + ") fives, ";
+            }
+            if (changeDue - 1 > 0)
+            {
+                ones = (int)(changeDue / 1);
+                changeDue = changeDue % 1;
+                changeString += "(" + ones + ") ones, ";
+            }
+            if (changeDue - 0.25M > 0)
+            {
+                quarters = (int)(changeDue / 0.25M);
+                changeDue = changeDue % 0.25M;
+                changeString += "(" + quarters + ") quarters, ";
+            }
+            if (changeDue - 0.10M > 0)
+            {
+                dimes = (int)(changeDue / 0.10M);
+                changeDue = changeDue % 0.10M;
+                changeString += "(" + dimes + ") dimes, ";
+            }
+            if (changeDue - 0.05M >= 0)
+            {
+                nickels = (int)(changeDue / 0.05M);
+                changeString += "(" + nickels + ") nickels, ";
+            }
+            string returnString = changeString.Substring(0, changeString.Length - 2);
+            return returnString;
         }
+
+
     }
 }

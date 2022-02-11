@@ -8,27 +8,35 @@ namespace Capstone.Classes
     {
         // This class should contain all the "work" for catering
 
+
         private List<CateringItem> items = new List<CateringItem>();
         private Dictionary<string, int> shoppingCart = new Dictionary<string, int>();
         private FileAccess fileAccess = new FileAccess();
 
         public Catering()
         {
-            
+            //gets list of menu items and calls method to sort them
             items = fileAccess.ReadFromFile();
             items = SortProductCode(items);
             
         }
 
+        //method sorts items in list by product code
         public List<CateringItem> SortProductCode(List<CateringItem> items)
         {
+            //list to hold only product codes and one to hold new sorted menu
             List<string> productCode = new List<string>();
             List<CateringItem> sortedMenu = new List<CateringItem>();
+
+            //makes list of just product codes
             foreach (CateringItem item in items)
             {
                 productCode.Add(item.ProductCode);
             }
+            //sorts alphabetically
             productCode.Sort();
+
+            //added items menu items in alaphabetical order using product list
             for (int i = 0; i < productCode.Count; i++)
             {
                 foreach (CateringItem item in items)
@@ -41,8 +49,12 @@ namespace Capstone.Classes
                 }
 
             }
+
+            //returns sorted list
             return sortedMenu;
         }
+
+        //gives an array of all menu items
         public CateringItem[] GetItems()
         {
             CateringItem[] arrayItems = new CateringItem[items.Count];
@@ -54,8 +66,11 @@ namespace Capstone.Classes
         }
 
         public decimal Balance { get; private set; }
+
+        //adds money to account 
         public decimal AddBalance(decimal addAmount)
         {
+            //checks if it's a valid dollar amount and if it's below the $1,500 max limit
             
             if (addAmount <= 100 && Balance + addAmount <= 1500)
             {
@@ -63,9 +78,14 @@ namespace Capstone.Classes
                     addAmount == 50 || addAmount == 100)
                 {
                     
+                    //adds money
                     Balance += addAmount;
+
+                    //writes amount added transaction to log file
                     string addMoneyInfo = $"{DateTime.Now} ADD MONEY: {addAmount} {Balance}";
                     fileAccess.WriteToFile(addMoneyInfo);
+
+                    //returns new balance
                     return Balance;
 
                 }
@@ -80,6 +100,8 @@ namespace Capstone.Classes
             }
         }
 
+
+        //adds selected items to shopping cart
         public string AddToShoppingCart(string productCode, int qty)
         {
            //runs through each item in menu
@@ -94,7 +116,8 @@ namespace Capstone.Classes
                         return "Item sold out";
                     }
                     
-                    //checks if quantity wanted greater or equal to inventory
+                    //checks if quantity wanted greater or equal to inventory and if balance
+                    //is sufficient for transaction
                    else if ((int.Parse(item.Qty) >= qty) && (Balance >= (qty * item.Price)))
                     {
 
@@ -106,20 +129,12 @@ namespace Capstone.Classes
 
                         //check if cart already has this item
                         if (shoppingCart.ContainsKey(productCode))
-                        {
-                            //if it does, it increases quantity
-                            shoppingCart[productCode] = qty + shoppingCart[productCode];
+                        {shoppingCart[productCode] = qty + shoppingCart[productCode];
                             Balance -= item.Price * qty;
-
-                            string shoppingCartTransaction = "";
-                            shoppingCartTransaction = $"{DateTime.Now} {shoppingCart[productCode]} {item.Description} {productCode} {item.Price * shoppingCart[productCode]} {Balance}";
-                            fileAccess.WriteToFile(shoppingCartTransaction);
                             if (int.Parse(item.Qty) == 0)
                             {
                                 item.Qty = "SOLD OUT";
-                            }
-
-                            
+                            } 
                             return "added";
                         }
                         else
@@ -154,6 +169,7 @@ namespace Capstone.Classes
             
         }
 
+        
        public Dictionary<string, int> GetCart()
        {
             return shoppingCart;

@@ -7,7 +7,7 @@ using Capstone.Classes;
 namespace CapstoneTests
 {
     [TestClass]
-    class FileAccessTest
+    public class FileAccessTest
     {
         [TestMethod]
         public void FileAccessTest1()
